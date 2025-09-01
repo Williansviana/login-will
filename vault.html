@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>💼 Cofre de Senhas</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="container">
+    <h1>💼 Cofre de Senhas</h1>
+    <p><strong>Usuário:</strong> <span id="userDisplay"></span></p>
+
+    <div class="add-form">
+      <input type="text" id="site" placeholder="Site (ex: google.com)" />
+      <input type="text" id="login" placeholder="Login" />
+      <input type="text" id="senha" placeholder="Senha" />
+      <button onclick="addItem()">Adicionar</button>
+    </div>
+
+    <ul id="passwordList"></ul>
+
+    <button onclick="logoutAll()" style="background: #e74c3c;">Sair da Conta</button>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
