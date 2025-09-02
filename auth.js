@@ -1,12 +1,9 @@
-// Função para alternar entre abas
+// Alternar entre abas
 function openTab(tabName) {
-  const tabs = document.getElementsByClassName("tab-content");
-  const buttons = document.querySelectorAll(".tab-btn");
-
-  for (let i = 0; i < tabs.length; i++) {
-    tabs[i].classList.remove("active");
-    buttons[i].classList.remove("active");
-  }
+  document.getElementById("loginForm").classList.remove("active");
+  document.getElementById("registerForm").classList.remove("active");
+  document.getElementById("loginTabBtn").classList.remove("active");
+  document.getElementById("registerTabBtn").classList.remove("active");
 
   if (tabName === "login") {
     document.getElementById("loginForm").classList.add("active");
@@ -17,102 +14,64 @@ function openTab(tabName) {
   }
 }
 
-// 📝 Cadastrar novo usuário
+// Cadastrar usuário
 function register() {
-  const username = document.getElementById("regUsername").value.trim();
+  const email = document.getElementById("regEmail").value;
   const password = document.getElementById("regPassword").value;
   const confirm = document.getElementById("regConfirmPassword").value;
   const error = document.getElementById("registerError");
 
-  error.textContent = "";
   error.style.display = "none";
-
-  if (username === "" || password === "") {
-    showError("registerError", "Preencha todos os campos.");
-    return;
-  }
-
   if (password !== confirm) {
     showError("registerError", "As senhas não coincidem.");
     return;
   }
 
-  // Verifica se usuário já existe
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
-  if (users.some(u => u.username === username)) {
-    showError("registerError", "Usuário já existe.");
+  if (password.length < 6) {
+    showError("registerError", "A senha deve ter pelo menos 6 caracteres.");
     return;
   }
 
-  // Salva novo usuário (com senha armazenada como hash simples — só para exemplo)
-  // Em produção: use PBKDF2, Argon2, etc.
-  users.push({
-    username,
-    password: btoa(password) // Base64 (apenas para exemplo — NÃO use em produção real)
-  });
-  localStorage.setItem("users", JSON.stringify(users));
-  showMessage("✅ Cadastro realizado! Agora você pode entrar.");
-  clearForms();
-  openTab("login");
+  auth.createUserWithEmailAndPassword(email, password)
+    .then(() => {
+      showMessage("✅ Conta criada! Redirecionando...");
+    })
+    .catch(err => {
+      showError("registerError", err.message);
+    });
 }
 
-// 🔐 Login
+// Login
 function login() {
-  const username = document.getElementById("loginUsername").value.trim();
+  const email = document.getElementById("loginEmail").value;
   const password = document.getElementById("loginPassword").value;
   const error = document.getElementById("loginError");
 
-  error.textContent = "";
   error.style.display = "none";
 
-  if (username === "" || password === "") {
-    showError("loginError", "Preencha todos os campos.");
-    return;
-  }
-
-  const users = JSON.parse(localStorage.getItem("users") || "[]");
-  const user = users.find(u => u.username === username);
-
-  if (!user || user.password !== btoa(password)) {
-    showError("loginError", "Usuário ou senha incorretos.");
-    return;
-  }
-
-  // Salva que está autenticado
-  localStorage.setItem("authenticated", "true");
-  localStorage.setItem("currentUser", username);
-  window.location.href = "vault.html";
+  auth.signInWithEmailAndPassword(email, password)
+    .then(() => {
+      window.location.href = "vault.html";
+    })
+    .catch(err => {
+      showError("loginError", err.message);
+    });
 }
 
-// Mostra erro
-function showError(elementId, message) {
-  const el = document.getElementById(elementId);
-  el.textContent = message;
+// Mostrar erro
+function showError(id, msg) {
+  const el = document.getElementById(id);
+  el.textContent = msg;
   el.style.display = "block";
 }
 
-// Limpa formulários
-function clearForms() {
-  document.getElementById("regUsername").value = "";
-  document.getElementById("regPassword").value = "";
-  document.getElementById("regConfirmPassword").value = "";
-}
-
-// Mostra mensagem temporária
+// Mostrar mensagem temporária
 function showMessage(text) {
   const toast = document.createElement("div");
   toast.textContent = text;
   toast.style.cssText = `
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    background: #2ecc71;
-    color: white;
-    padding: 12px 16px;
-    border-radius: 6px;
-    font-size: 14px;
-    z-index: 1000;
-    opacity: 1;
+    position: fixed; top: 20px; right: 20px; background: #2ecc71; color: white;
+    padding: 12px 16px; border-radius: 6px; z-index: 1000; opacity: 1;
     transition: opacity 0.5s;
   `;
   document.body.appendChild(toast);
@@ -122,16 +81,17 @@ function showMessage(text) {
   }, 3000);
 }
 
-// Verifica autenticação ao carregar
+// Verifica autenticação
 window.onload = function () {
-  const isAuthenticated = localStorage.getItem("authenticated") === "true";
-  const isVaultPage = window.location.pathname.endsWith("vault.html");
+  auth.onAuthStateChanged(user => {
+    const isVault = window.location.pathname.includes("vault.html");
+    if (user && isVault) {
+      window.currentUser = user;
+    } else if (!user && isVault) {
+      window.location.href = "index.html";
+    }
+  });
 
-  if (isVaultPage && !isAuthenticated) {
-    window.location.href = "index.html";
-  }
-
-  // Abre aba de login por padrão
   if (document.getElementById("loginForm")) {
     openTab("login");
   }

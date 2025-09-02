@@ -4,7 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <link rel="shortcut icon" href="./img/chave.png" type="image/x-icon">
-  <title>Login e Cadastro</title>
+  <title>Cofre de Senhas</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -19,8 +19,8 @@
 
     <!-- Formulário de Login -->
     <form id="loginForm" class="tab-content active">
-      <h2>Entrar na Sua Conta</h2>
-      <input type="text" id="loginUsername" placeholder="Usuário" required />
+      <h2>Entre na sua conta</h2>
+      <input type="email" id="loginEmail" placeholder="Seu email" required />
       <input type="password" id="loginPassword" placeholder="Senha" required />
       <button type="button" onclick="login()">Acessar Cofre</button>
       <p id="loginError" class="error-message"></p>
@@ -28,15 +28,24 @@
 
     <!-- Formulário de Cadastro -->
     <form id="registerForm" class="tab-content">
-      <h2>Criar Nova Conta</h2>
-      <input type="text" id="regUsername" placeholder="Novo Usuário" required />
-      <input type="password" id="regPassword" placeholder="Nova Senha" required />
-      <input type="password" id="regConfirmPassword" placeholder="Confirmar Senha" required />
+      <h2>Crie sua conta</h2>
+      <input type="email" id="regEmail" placeholder="Email" required />
+      <input type="password" id="regPassword" placeholder="Senha (mín. 6 caracteres)" required />
+      <input type="password" id="regConfirmPassword" placeholder="Confirmar senha" required />
       <button type="button" onclick="register()">Cadastrar</button>
       <p id="registerError" class="error-message"></p>
     </form>
   </div>
 
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+
+  <!-- Configuração do Firebase -->
+  <script src="firebase-config.js"></script>
+
+  <!-- Scripts de autenticação -->
   <script src="auth.js"></script>
 </body>
 </html>
