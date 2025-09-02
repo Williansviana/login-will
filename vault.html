@@ -3,7 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>💼 Cofre de Senhas</title>
+  <link rel="shortcut icon" href="img/cofre.png" type="image/x-icon">
+  <title>Cofre de Senhas</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
@@ -11,13 +12,21 @@
     <h1>💼 Cofre de Senhas</h1>
     <p><strong>Logado como:</strong> <span id="userEmail"></span></p>
 
+    <!-- Formulário de Adicionar/Editar -->
     <div class="add-form">
       <input type="text" id="site" placeholder="Site (ex: google.com)" />
       <input type="text" id="login" placeholder="Login" />
       <input type="text" id="senha" placeholder="Senha" />
-      <button onclick="addItem()">Adicionar</button>
+
+      <!-- Botões: Adicionar ou Salvar Alterações -->
+      <div>
+        <button id="addButton" onclick="addItem()">Adicionar</button>
+        <button id="saveEditButton" class="hidden" onclick="saveEdit()">Salvar Alterações</button>
+        <button id="cancelEditButton" class="hidden" onclick="cancelEdit()">Cancelar</button>
+      </div>
     </div>
 
+    <!-- Lista de Senhas -->
     <ul id="passwordList"></ul>
 
     <button onclick="logout()" style="background: #e74c3c;">Sair da Conta</button>
@@ -27,11 +36,7 @@
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
-
-  <!-- Configuração do Firebase -->
   <script src="firebase-config.js"></script>
-
-  <!-- Scripts -->
   <script src="script.js"></script>
 </body>
 </html>

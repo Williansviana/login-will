@@ -164,3 +164,28 @@ button:hover {
 #passwordList li strong {
   color: #2c3e50;
 }
+
+/* Esconder elementos */
+.hidden {
+  display: none !important;
+}
+
+/* Botões de ação na lista */
+.action-btn {
+  margin-left: 8px;
+  padding: 4px 8px;
+  font-size: 12px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.edit-btn {
+  background: #f39c12;
+  color: white;
+}
+
+.delete-btn {
+  background: #e74c3c;
+  color: white;
+}
