@@ -7,7 +7,7 @@ const addButton = document.getElementById("addButton");
 const saveEditButton = document.getElementById("saveEditButton");
 const cancelEditButton = document.getElementById("cancelEditButton");
 
-let editingId = null; // Armazena o ID do item que está sendo editado
+let editingId = null;
 
 // Mostrar email do usuário
 auth.onAuthStateChanged(user => {
@@ -20,7 +20,7 @@ auth.onAuthStateChanged(user => {
   }
 });
 
-// Carregar senhas do Firestore
+// Carregar senhas do Firestore (com numeração)
 function loadPasswords() {
   const user = auth.currentUser;
   if (!user) return;
@@ -28,15 +28,16 @@ function loadPasswords() {
   db.collection("users")
     .doc(user.uid)
     .collection("passwords")
+    .orderBy("createdAt", "desc") // Do mais novo para o mais antigo
     .onSnapshot(snapshot => {
       passwordList.innerHTML = "";
+      let index = 1; // Número sequencial: 1, 2, 3...
       snapshot.forEach(doc => {
         const data = doc.data();
-        const item = { id: doc.id, ...data };
 
         const li = document.createElement("li");
         li.innerHTML = `
-          <strong>${escapeHtml(data.site)}</strong><br>
+          <strong>[${index}] ${escapeHtml(data.site)}</strong><br>
           Login: ${escapeHtml(data.login)}<br>
           Senha: ${escapeHtml(data.senha)}
           <div style="margin-top: 8px;">
@@ -45,6 +46,7 @@ function loadPasswords() {
           </div>
         `;
         passwordList.appendChild(li);
+        index++;
       });
 
       if (snapshot.size === 0) {
@@ -62,7 +64,6 @@ function startEdit(id, site, login, senha) {
   loginInput.value = login;
   senhaInput.value = senha;
 
-  // Mudar os botões
   addButton.classList.add("hidden");
   saveEditButton.classList.remove("hidden");
   cancelEditButton.classList.remove("hidden");
@@ -152,7 +153,7 @@ function deleteItem(id) {
     });
 }
 
-// Limpar formulário (voltar ao modo "adicionar")
+// Limpar formulário
 function clearForm() {
   siteInput.value = "";
   loginInput.value = "";

@@ -165,12 +165,7 @@ button:hover {
   color: #2c3e50;
 }
 
-/* Esconder elementos */
-.hidden {
-  display: none !important;
-}
-
-/* Botões de ação na lista */
+/* Botões de ação */
 .action-btn {
   margin-left: 8px;
   padding: 4px 8px;
@@ -188,4 +183,9 @@ button:hover {
 .delete-btn {
   background: #e74c3c;
   color: white;
+}
+
+/* Esconder elementos */
+.hidden {
+  display: none !important;
 }
